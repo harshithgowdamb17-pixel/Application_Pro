@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A Small Proposal</title>
+  <title>Can We Meet?</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe6f0, #fff5f8);
+      background: linear-gradient(135deg, #f7fbff, #fff8fb);
       color: #333;
       display: flex;
       align-items: center;
@@ -19,104 +19,167 @@
 
     .card {
       background: white;
-      padding: 35px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      max-width: 450px;
+      padding: 32px;
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+      max-width: 520px;
       width: 90%;
     }
 
+    .icon {
+      font-size: 46px;
+      margin-bottom: 8px;
+    }
+
     h1 {
-      color: #e91e63;
+      color: #d81b60;
       margin-bottom: 10px;
+      font-size: 28px;
     }
 
-    .heart {
-      font-size: 55px;
-      animation: beat 1s infinite;
-    }
-
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
+    h2 {
+      color: #d81b60;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 20px;
     }
 
     p {
-      font-size: 18px;
+      font-size: 17px;
       line-height: 1.6;
+      margin: 10px 0;
     }
 
-    button {
-      margin: 10px;
-      padding: 12px 24px;
+    button, a.confirm-btn {
+      margin: 8px;
+      padding: 12px 20px;
       border: none;
       border-radius: 25px;
       font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
     }
 
-    .yes {
-      background: #e91e63;
+    .date-btn {
+      background: #d81b60;
       color: white;
     }
 
-    .yes:hover {
-      background: #c2185b;
+    .date-btn:hover {
+      background: #ad1457;
     }
 
-    .no {
+    .place-btn {
       background: #f1f1f1;
       color: #333;
     }
 
-    .message {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #e91e63;
+    .place-btn:hover {
+      background: #ffe0ec;
+    }
+
+    .result {
+      margin-top: 22px;
+      padding: 15px;
+      border-radius: 14px;
+      background: #fff0f6;
+      color: #d81b60;
+      font-size: 18px;
       font-weight: bold;
       display: none;
+    }
+
+    .confirm-btn {
+      background: #25D366;
+      color: white;
+      display: none;
+      margin-top: 16px;
+    }
+
+    .confirm-btn:hover {
+      background: #1ebe5d;
+    }
+
+    .small {
+      font-size: 14px;
+      color: #666;
+      margin-top: 14px;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="heart">❤️</div>
-    <h1>A Small Message For You</h1>
+    <div class="icon">☕</div>
+    <h1>Can We Meet?</h1>
 
     <p>
-      I do not need perfect words to say this,
-      because my heart already knows the truth.
+      I thought this would be a simple way to plan.
+      Please choose whatever feels comfortable for you.
     </p>
 
-    <p>
-      You make my days happier, my smile brighter,
-      and my life more beautiful.
-    </p>
+    <h2>When can we meet?</h2>
+    <button class="date-btn" onclick="selectDate('Saturday')">Saturday</button>
+    <button class="date-btn" onclick="selectDate('Sunday')">Sunday</button>
 
-    <h2>Will you be mine?</h2>
+    <h2>Where shall we meet?</h2>
+    <button class="place-btn" onclick="selectPlace('Coffee Day')">Coffee Day ☕</button>
+    <button class="place-btn" onclick="selectPlace('Dessert Place')">Dessert Place 🍰</button>
+    <button class="place-btn" onclick="selectPlace('Temple')">Temple 🙏</button>
+    <button class="place-btn" onclick="selectPlace('Mall')">Mall 🛍️</button>
 
-    <button class="yes" onclick="showLove()">Yes</button>
-    <button class="no" onclick="showWait()">I need time</button>
+    <div id="result" class="result"></div>
 
-    <div id="loveMessage" class="message">
-      You just made my heart the happiest ❤️
-    </div>
+    <a id="whatsappBtn" class="confirm-btn" target="_blank" rel="noopener noreferrer">
+      Confirm on WhatsApp
+    </a>
 
-    <div id="waitMessage" class="message">
-      I will wait with the same care and respect ❤️
+    <div class="small">
+      No pressure. You can choose what feels comfortable.
     </div>
   </div>
 
   <script>
-    function showLove() {
-      document.getElementById("loveMessage").style.display = "block";
-      document.getElementById("waitMessage").style.display = "none";
+    let selectedDate = "";
+    let selectedPlace = "";
+
+    // Replace this with your WhatsApp number including country code, without + or spaces.
+    // Example for India: 919876543210
+    const yourWhatsAppNumber = "916362335417";
+
+    function selectDate(date) {
+      selectedDate = date;
+      showResult();
     }
 
-    function showWait() {
-      document.getElementById("waitMessage").style.display = "block";
-      document.getElementById("loveMessage").style.display = "none";
+    function selectPlace(place) {
+      selectedPlace = place;
+      showResult();
+    }
+
+    function showResult() {
+      const result = document.getElementById("result");
+      const whatsappBtn = document.getElementById("whatsappBtn");
+
+      if (selectedDate && selectedPlace) {
+        result.innerHTML = "Sounds good 😊 " + selectedDate + " at " + selectedPlace + ".";
+        result.style.display = "block";
+
+        const message = "Hi, " + selectedDate + " at " + selectedPlace + " works for me.";
+        const whatsappUrl = "https://wa.me/" + yourWhatsAppNumber + "?text=" + encodeURIComponent(message);
+
+        whatsappBtn.href = whatsappUrl;
+        whatsappBtn.style.display = "inline-block";
+      } else if (selectedDate) {
+        result.innerHTML = selectedDate + " sounds nice 😊 Now choose the place.";
+        result.style.display = "block";
+        whatsappBtn.style.display = "none";
+      } else if (selectedPlace) {
+        result.innerHTML = selectedPlace + " sounds good 😊 Now choose Saturday or Sunday.";
+        result.style.display = "block";
+        whatsappBtn.style.display = "none";
+      }
     }
   </script>
 </body>
