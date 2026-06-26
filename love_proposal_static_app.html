@@ -102,6 +102,20 @@
       background: #1ebe5d;
     }
 
+    .confirm-area {
+      min-height: 96px;
+      position: relative;
+      margin-top: 8px;
+    }
+
+    .playful-msg {
+      font-size: 14px;
+      color: #d81b60;
+      min-height: 22px;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
     .small {
       font-size: 14px;
       color: #666;
@@ -131,9 +145,12 @@
 
     <div id="result" class="result"></div>
 
-    <a id="whatsappBtn" class="confirm-btn" target="_blank" rel="noopener noreferrer">
-      Confirm on WhatsApp
-    </a>
+    <div class="confirm-area">
+      <a id="whatsappBtn" class="confirm-btn" target="_blank" rel="noopener noreferrer">
+        Confirm on WhatsApp
+      </a>
+      <div id="playfulMsg" class="playful-msg"></div>
+    </div>
 
     <div class="small">
       No pressure. You can choose what feels comfortable.
@@ -143,10 +160,12 @@
   <script>
     let selectedDate = "";
     let selectedPlace = "";
+    let moveCount = 0;
+    const maxMoves = 3;
 
     // Replace this with your WhatsApp number including country code, without + or spaces.
     // Example for India: 919876543210
-    const yourWhatsAppNumber = "916362335417";
+    const yourWhatsAppNumber = "91XXXXXXXXXX";
 
     function selectDate(date) {
       selectedDate = date;
@@ -171,16 +190,68 @@
 
         whatsappBtn.href = whatsappUrl;
         whatsappBtn.style.display = "inline-block";
+        resetConfirmButton();
       } else if (selectedDate) {
         result.innerHTML = selectedDate + " sounds nice 😊 Now choose the place.";
         result.style.display = "block";
         whatsappBtn.style.display = "none";
+        resetConfirmButton();
       } else if (selectedPlace) {
         result.innerHTML = selectedPlace + " sounds good 😊 Now choose Saturday or Sunday.";
         result.style.display = "block";
         whatsappBtn.style.display = "none";
+        resetConfirmButton();
       }
     }
+
+    function resetConfirmButton() {
+      moveCount = 0;
+      const whatsappBtn = document.getElementById("whatsappBtn");
+      const playfulMsg = document.getElementById("playfulMsg");
+      whatsappBtn.style.position = "relative";
+      whatsappBtn.style.left = "0px";
+      whatsappBtn.style.top = "0px";
+      playfulMsg.innerHTML = "";
+    }
+
+    function moveButtonPlayfully(event) {
+      const whatsappBtn = document.getElementById("whatsappBtn");
+      const playfulMsg = document.getElementById("playfulMsg");
+
+      if (moveCount < maxMoves) {
+        event.preventDefault();
+        moveCount++;
+
+        const messages = [
+          "😄 Not so easy...",
+          "Almost there...",
+          "One last try... ❤️"
+        ];
+
+        // Small movement only, so it remains easy and safe to click.
+        const positions = [
+          { left: "-55px", top: "8px" },
+          { left: "55px", top: "-4px" },
+          { left: "0px", top: "18px" }
+        ];
+
+        whatsappBtn.style.position = "relative";
+        whatsappBtn.style.left = positions[moveCount - 1].left;
+        whatsappBtn.style.top = positions[moveCount - 1].top;
+        playfulMsg.innerHTML = messages[moveCount - 1];
+
+        if (moveCount === maxMoves) {
+          setTimeout(() => {
+            whatsappBtn.style.left = "0px";
+            whatsappBtn.style.top = "0px";
+            playfulMsg.innerHTML = "😊 Okay, you got me! Click to confirm.";
+          }, 500);
+        }
+      }
+    }
+
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    whatsappBtn.addEventListener("click", moveButtonPlayfully);
   </script>
 </body>
 </html>
