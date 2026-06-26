@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Can We Meet?</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -15,25 +19,26 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      padding: 18px;
     }
 
     .card {
-      background: white;
-      padding: 32px;
-      border-radius: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.14);
-      max-width: 520px;
-      width: 90%;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+      max-width: 560px;
+      width: 100%;
     }
 
     .icon {
-      font-size: 46px;
+      font-size: 44px;
       margin-bottom: 8px;
     }
 
     h1 {
       color: #d81b60;
-      margin-bottom: 10px;
+      margin: 8px 0 10px;
       font-size: 28px;
     }
 
@@ -45,50 +50,56 @@
     }
 
     p {
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1.6;
       margin: 10px 0;
     }
 
     button, a.confirm-btn {
-      margin: 8px;
-      padding: 12px 20px;
+      margin: 7px;
+      padding: 12px 18px;
       border: none;
       border-radius: 25px;
-      font-size: 16px;
+      font-size: 15.5px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.25s ease;
       text-decoration: none;
       display: inline-block;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .date-btn {
-      background: #d81b60;
-      color: white;
-    }
-
-    .date-btn:hover {
-      background: #ad1457;
-    }
-
-    .place-btn {
-      background: #f1f1f1;
+    .option-btn {
+      background: #f2f2f2;
       color: #333;
     }
 
-    .place-btn:hover {
+    .option-btn:hover {
       background: #ffe0ec;
+      transform: translateY(-1px);
+    }
+
+    .option-btn.active {
+      background: #d81b60;
+      color: white;
+      box-shadow: 0 5px 12px rgba(216, 27, 96, 0.25);
     }
 
     .result {
       margin-top: 22px;
-      padding: 15px;
-      border-radius: 14px;
+      padding: 16px;
+      border-radius: 16px;
       background: #fff0f6;
       color: #d81b60;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
       display: none;
+      line-height: 1.5;
+    }
+
+    .confirm-area {
+      min-height: 105px;
+      position: relative;
+      margin-top: 10px;
     }
 
     .confirm-btn {
@@ -96,16 +107,11 @@
       color: white;
       display: none;
       margin-top: 16px;
+      font-weight: bold;
     }
 
     .confirm-btn:hover {
       background: #1ebe5d;
-    }
-
-    .confirm-area {
-      min-height: 96px;
-      position: relative;
-      margin-top: 8px;
     }
 
     .playful-msg {
@@ -117,9 +123,30 @@
     }
 
     .small {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #666;
-      margin-top: 14px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        padding: 22px 16px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      button, a.confirm-btn {
+        width: 85%;
+        max-width: 260px;
+        margin: 6px auto;
+      }
     }
   </style>
 </head>
@@ -134,14 +161,22 @@
     </p>
 
     <h2>When can we meet?</h2>
-    <button class="date-btn" onclick="selectDate('Saturday')">Saturday</button>
-    <button class="date-btn" onclick="selectDate('Sunday')">Sunday</button>
+    <button class="option-btn day-btn" onclick="selectOption('day', 'Saturday', this)">Saturday</button>
+    <button class="option-btn day-btn" onclick="selectOption('day', 'Sunday', this)">Sunday</button>
+    <button class="option-btn day-btn" onclick="selectCustomOption('day', 'another day', this)">Suggest another day</button>
+
+    <h2>What time is comfortable?</h2>
+    <button class="option-btn time-btn" onclick="selectOption('time', 'morning', this)">Morning</button>
+    <button class="option-btn time-btn" onclick="selectOption('time', 'afternoon', this)">Afternoon</button>
+    <button class="option-btn time-btn" onclick="selectOption('time', 'evening', this)">Evening</button>
+    <button class="option-btn time-btn" onclick="selectCustomOption('time', 'another time', this)">Suggest another time</button>
 
     <h2>Where shall we meet?</h2>
-    <button class="place-btn" onclick="selectPlace('Coffee Day')">Coffee Day ☕</button>
-    <button class="place-btn" onclick="selectPlace('Dessert Place')">Dessert Place 🍰</button>
-    <button class="place-btn" onclick="selectPlace('Temple')">Temple 🙏</button>
-    <button class="place-btn" onclick="selectPlace('Mall')">Mall 🛍️</button>
+    <button class="option-btn place-btn" onclick="selectOption('place', 'Coffee Day', this)">Coffee Day ☕</button>
+    <button class="option-btn place-btn" onclick="selectOption('place', 'dessert / ice cream', this)">Dessert / Ice Cream 🍨</button>
+    <button class="option-btn place-btn" onclick="selectOption('place', 'mall', this)">Mall 🛍️</button>
+    <button class="option-btn place-btn" onclick="selectOption('place', 'temple', this)">Temple 🙏</button>
+    <button class="option-btn place-btn" onclick="selectCustomOption('place', 'another place', this)">Suggest another place</button>
 
     <div id="result" class="result"></div>
 
@@ -153,55 +188,101 @@
     </div>
 
     <div class="small">
-      No pressure. You can choose what feels comfortable.
+      No pressure. You can choose what feels comfortable for you.
     </div>
   </div>
 
   <script>
-    let selectedDate = "";
+    let selectedDay = "";
+    let selectedTime = "";
     let selectedPlace = "";
     let moveCount = 0;
     const maxMoves = 3;
 
+    // IMPORTANT:
     // Replace this with your WhatsApp number including country code, without + or spaces.
     // Example for India: 919876543210
-    const yourWhatsAppNumber = "916362335417";
+    const yourWhatsAppNumber = "91XXXXXXXXXX";
 
-    function selectDate(date) {
-      selectedDate = date;
-      showResult();
+    function selectOption(type, value, buttonElement) {
+      setSelectedValue(type, value);
+      setActiveButton(type, buttonElement);
+      updateResult();
     }
 
-    function selectPlace(place) {
-      selectedPlace = place;
-      showResult();
+    function selectCustomOption(type, placeholder, buttonElement) {
+      const labelMap = {
+        day: "Please type the day you prefer",
+        time: "Please type the time you prefer",
+        place: "Please type the place you prefer"
+      };
+
+      const customValue = prompt(labelMap[type] + ":");
+
+      if (customValue && customValue.trim() !== "") {
+        setSelectedValue(type, customValue.trim());
+        setActiveButton(type, buttonElement);
+        updateResult();
+      } else {
+        setSelectedValue(type, placeholder);
+        setActiveButton(type, buttonElement);
+        updateResult();
+      }
     }
 
-    function showResult() {
+    function setSelectedValue(type, value) {
+      if (type === "day") selectedDay = value;
+      if (type === "time") selectedTime = value;
+      if (type === "place") selectedPlace = value;
+    }
+
+    function setActiveButton(type, buttonElement) {
+      const classMap = {
+        day: ".day-btn",
+        time: ".time-btn",
+        place: ".place-btn"
+      };
+
+      document.querySelectorAll(classMap[type]).forEach(btn => btn.classList.remove("active"));
+      buttonElement.classList.add("active");
+    }
+
+    function updateResult() {
       const result = document.getElementById("result");
       const whatsappBtn = document.getElementById("whatsappBtn");
 
-      if (selectedDate && selectedPlace) {
-        result.innerHTML = "Sounds good 😊 " + selectedDate + " at " + selectedPlace + ".";
-        result.style.display = "block";
+      result.style.display = "block";
 
-        const message = "Hi, " + selectedDate + " at " + selectedPlace + " works for me.";
-        const whatsappUrl = "https://wa.me/" + yourWhatsAppNumber + "?text=" + encodeURIComponent(message);
-
-        whatsappBtn.href = whatsappUrl;
-        whatsappBtn.style.display = "inline-block";
-        resetConfirmButton();
-      } else if (selectedDate) {
-        result.innerHTML = selectedDate + " sounds nice 😊 Now choose the place.";
-        result.style.display = "block";
+      if (!selectedDay) {
+        result.innerHTML = "Please choose the day first 😊";
         whatsappBtn.style.display = "none";
         resetConfirmButton();
-      } else if (selectedPlace) {
-        result.innerHTML = selectedPlace + " sounds good 😊 Now choose Saturday or Sunday.";
-        result.style.display = "block";
-        whatsappBtn.style.display = "none";
-        resetConfirmButton();
+        return;
       }
+
+      if (!selectedTime) {
+        result.innerHTML = selectedDay + " sounds nice 😊 Now choose the time.";
+        whatsappBtn.style.display = "none";
+        resetConfirmButton();
+        return;
+      }
+
+      if (!selectedPlace) {
+        result.innerHTML = selectedDay + " " + selectedTime + " sounds nice 😊 Now choose the place.";
+        whatsappBtn.style.display = "none";
+        resetConfirmButton();
+        return;
+      }
+
+      const finalText = selectedDay + " " + selectedTime + " at " + selectedPlace;
+      result.innerHTML = "Sounds good 😊<br>" + finalText + ".";
+
+      const message = "Hi, " + finalText + " works for me.";
+      const whatsappUrl = "https://wa.me/" + yourWhatsAppNumber + "?text=" + encodeURIComponent(message);
+
+      whatsappBtn.href = whatsappUrl;
+      whatsappBtn.style.display = "inline-block";
+      resetConfirmButton();
     }
 
     function resetConfirmButton() {
@@ -228,7 +309,6 @@
           "One last try... ❤️"
         ];
 
-        // Small movement only, so it remains easy and safe to click.
         const positions = [
           { left: "-55px", top: "8px" },
           { left: "55px", top: "-4px" },
